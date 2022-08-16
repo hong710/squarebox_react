@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router,Routes,Route} from "react-router-dom";
+import Home from "./pages/Home";
+import CategoryPage from "./pages/CategoryPage";
+import Announcement from './components/Announcement'
+import Navbar from "./components/Navbar";
+import ProductPage from "./pages/ProductPage";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+
+// TODO setup Redux
+// TODO : Paganation
+//TODO : breadcrumbs
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const client = new QueryClient()
+
+	return (
+		<QueryClientProvider client={client} >
+		<Router>
+			<Announcement />
+        	<Navbar />
+			<Routes>
+				<Route path="/" element={<Home />} />
+				<Route path="category">
+					<Route path=":categorySlug" element={<CategoryPage />}/>
+					<Route path=":category/:productId" element={<ProductPage />} />	
+					<Route path="topdeals/:productId" element={<ProductPage />} />
+				</Route>				
+			</Routes>
+		</Router>
+		</QueryClientProvider >
+	);
 }
 
 export default App;
